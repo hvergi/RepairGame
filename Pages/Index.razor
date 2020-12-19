@@ -146,7 +146,7 @@
         Game.SaveSlot = slot;
         Game.BuyItem(Data.MarketData.shopItems[0]);
         localStorage.SetItem<string>(Game.Settings.GetSaveKey(slot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
-        NavigationManager.NavigateTo("/game");
+        NavigationManager.NavigateTo(Game.GetPageUrl("/game"));
     }
 
     private void LoadGame(int slot)
@@ -157,7 +157,7 @@
             Game.LoadSave(sm);
             Game.isGameLoaded = true;
             Game.SaveSlot = slot;
-            NavigationManager.NavigateTo("/game");
+            NavigationManager.NavigateTo(Game.GetPageUrl("/game"));
         }
     }
 

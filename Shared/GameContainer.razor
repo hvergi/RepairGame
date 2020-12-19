@@ -33,7 +33,7 @@
     {
         if (!Game.isGameLoaded)
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo(Game.GetPageUrl("/"));
         }
         RepairLoop();
         Game.onMessage += ShowNotification;

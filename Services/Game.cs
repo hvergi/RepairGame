@@ -7,6 +7,8 @@ namespace MadnathRepairGame.Services
 {
     public class Game
     {
+        public bool IsDev = false;
+        
         //GUI quirks
         public event Action onChange;
         private void NotifyDataChanged() => onChange?.Invoke();
@@ -127,5 +129,18 @@ namespace MadnathRepairGame.Services
 
             }
         }
+
+        public string GetPageUrl(string url)
+        {
+            if (IsDev)
+            {
+                return url;
+            }
+            else
+            {
+                return "/RepairGame" + url;
+            }
+        }
     }
+
 }
