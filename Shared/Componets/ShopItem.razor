@@ -1,0 +1,36 @@
+﻿@inject Services.Game Game;
+
+<div class="col-12 col-sm-12 col-md-6 col-lg-3">
+    <div class="card container-fluid">
+        <h5 class="card-header">@Item.Name</h5>
+        <div class="card-body">
+            <p class="card-text">@Item.Description</p>
+        </div>
+        <div class="card-footer">
+            @if (Game.Player.CanBuy(Item.Currency, Item.GetPrice(Game.Player.GetNumberBought(Item.GetItemKey()))))
+            {
+                <button type="button" class="btn btn-block btn-success" @onclick="@(() => Game.BuyItem(Item))">Buy for @Item.GetPrice(Game.Player.GetNumberBought(Item.GetItemKey())) @Data.ShopData.Currencies[(int)Item.Currency]</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-block btn-danger" @onclick="CantBuyItem">Buy for @Item.GetPrice(Game.Player.GetNumberBought(Item.GetItemKey())) @Data.ShopData.Currencies[(int)Item.Currency]</button>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Models.ShopItem Item { get; set; }
+
+    private void CantBuyItem()
+    {
+        Radzen.NotificationMessage message = new NotificationMessage();
+        message.Duration = 1000;
+        message.Severity = NotificationSeverity.Error;
+        message.Summary = "Can't Buy that item";
+        double shortC = Item.GetPrice(Game.Player.GetNumberBought(Item.GetItemKey())) - Game.Player.GetCurrency(Item.Currency);
+        message.Detail = "You need " +shortC+ " more " + Data.ShopData.Currencies[(int)Item.Currency] + ".";
+        Game.SendMessage(message);
+    }
+}

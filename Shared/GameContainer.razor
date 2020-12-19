@@ -1,0 +1,66 @@
+﻿@inject NavigationManager NavigationManager;
+@inject Services.Game Game;
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage;
+@inject NotificationService NotificationService;
+
+@layout MainLayout
+@inherits LayoutComponentBase
+
+<div class="container-fluid">
+    <div class="row"></div>
+    <div class="row">
+        <GameNavBar />
+        <div class="col-sm-12 col-md-8 col-lg-10 pl-0 pr-0">
+            <div class="container-fluid bg-dark text-warning pb-3 pt-3">
+                <GameTopBar />
+            </div>
+            <div class="container-fluid">
+                <div class="bg-light border border-dark mt-1">
+                    <div class="row container-fluid">
+                        @Body
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    bool isRepairRunning = false;
+
+    protected override Task OnInitializedAsync()
+    {
+        if (!Game.isGameLoaded)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        RepairLoop();
+        Game.onMessage += ShowNotification;
+        return base.OnInitializedAsync();
+    }
+
+    async Task RepairLoop()
+    {
+        isRepairRunning = true;
+        int saveDelay = 0;
+        while (isRepairRunning)
+        {
+            await Task.Delay(Game.Settings.TickSpeed);
+            saveDelay++;
+            Game.RepairItems();
+            StateHasChanged();
+            if (saveDelay == 10)
+            {
+                saveDelay = 0;
+                localStorage.SetItem<string>(Game.Settings.GetSaveKey(Game.SaveSlot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
+            }
+        }
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        if (message != null)
+            NotificationService.Notify(message);
+    }
+}

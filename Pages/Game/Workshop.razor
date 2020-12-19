@@ -1,0 +1,112 @@
+﻿@page "/game/workshop"
+@layout GameContainer
+
+@using Models;
+@using Factories;
+@using Data;
+
+@inject Services.Game Game;
+
+<h3>Workshop</h3>
+<div class="row">
+    @for (int i = 0; i < Game.Player.Items.Length; i++)
+    {
+        int count = i;
+        <div class="col-12 col-sm-8 col-md-6 col-lg-3 mb-3">
+            <div class="card bg-light" style="min-height:22rem">
+                <div class="card-header text-center">
+                    <h4 class="text-black-50">Workstation @(i+1)</h4>
+                </div>
+                @if (!Game.Player.WorkstationUnlocked[i])
+                {
+                    <div class="card-body">
+                        <div class="card-title">Locked</div>
+                        <div class="card-text">
+                            <p>This station is currently locked, you can unlock it in the market.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <p>Unlock for @GetUnlockCost(count)</p>
+                    </div>
+                }
+                else
+                {
+                    @if (Game.Player.Items[i].isEmpty)
+                    {
+                        <div class="card-body">
+                            <h5 class="card-title">Empty Station</h5>
+                            <p class="card-text">Request a new item.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-block btn-primary" @onclick="@(() => { RequestNewItem(count); })">Request New Item</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-body">
+                            <div class="bg-light p-2 border border-warning rounded text-center">
+                                <div class="card-title"><ItemNameplate ItemName="@Game.Player.Items[i].GetItemName()" ItemRarity="Game.Player.Items[i].ItemRarity"/></div>
+                                <div class="card-subtitle mb-2 text-muted">Requested by @NpcData.Npcs[Game.Player.Items[i].NpcID].Name</div>
+                            </div>
+                            <p>
+                                Quality: <span>@Game.Player.Items[i].QLCurrent</span> <br />
+                                Damage: <span>@Game.Player.Items[i].DmgCurrent</span><br />
+                                Price: <span>@Game.Player.Items[i].GetPrice()</span><br />
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            @if (!Game.isRepairActive[i] && Game.Player.Items[i].DmgCurrent > 0)
+                            {
+                                <button type="button" class="btn btn-block btn-dark" @onclick="@(() => { StartItemRepair(count); })">Start Repairing Item</button>
+                            } else if (!Game.isRepairActive[i] && Game.Player.Items[i].DmgCurrent == 0)
+                            {
+                                <button type="button" class="btn btn-block btn-success" @onclick="@(() => { ReturnItem(count); })">Return Item</button>
+                            }else if (Game.isRepairActive[i])
+                            {
+                                <p class="">@Game.Player.Items[i].GetTimeRemaining(Game.Settings.TickSpeed)</p>
+                                <div class="progress border border-dark mb-1">
+                                    <div class="progress-bar" style="width:@Game.Player.Items[i].GetRepairPercent()"></div>
+                                </div>
+                            }
+                            else { 
+                                <p class="text-danger">If you are seeing this Hvergi messed up.</p>
+                            }
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {      
+    protected override void OnInitialized()
+    {
+        Game.onChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    private void RequestNewItem(int slot)
+    {
+        Game.Player.Items[slot] = RepairableItemFactory.GetNewRepairableItem(Game.Player.RepairLevel);
+    }
+
+    private void StartItemRepair(int slot)
+    {
+        Game.isRepairActive[slot] = true;
+    }
+    private void ReturnItem(int slot)
+    {
+        Game.ReturnItem(slot);
+    }
+
+    public string GetUnlockCost(int slot)
+    {
+        double price = MarketData.shopItems[slot].GetPrice(0);
+        string currency = ShopData.Currencies[0];
+
+        return price + " " + currency;
+    }
+}

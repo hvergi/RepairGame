@@ -1,0 +1,30 @@
+﻿@using Data;
+
+<span style="color: @RarityColors[(int)ItemRarity]">@GetName()</span>
+
+@code {
+    [Parameter] public string ItemName { get; set; }
+    [Parameter] public ItemData.ItemRarity ItemRarity { get; set; }
+
+    private string[] RarityColors =
+    {
+        "#17202a",
+        "#43a047",
+        "#0091ea",
+        "#d500f9",
+        "#f57f17",
+        "#d50000",
+    };
+
+    private string GetName()
+    {
+        if(ItemRarity == ItemData.ItemRarity.Common)
+        {
+            return ItemName;
+        }
+        else
+        {
+            return ItemRarity.ToString() + " " + ItemName;
+        }
+    }
+}

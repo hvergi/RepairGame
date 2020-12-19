@@ -1,0 +1,50 @@
+﻿@page "/game/masterworkguild"
+@layout GameContainer
+
+@inject Services.Game Game;
+
+<div class="row container">
+    <h3>Masterwork Guild</h3>
+</div>
+@if (Game.Player.Acensions > 0 || Game.Player.RepairLevel >= 100)
+{
+<div class="row container-fluid">
+    @if (Game.Player.RepairLevel >= 100)
+    {
+        <div class="row container-fluid">
+            Bug Hvergi for accession.
+        </div>
+    }
+    <div class="row container-fluid">
+        @foreach (Models.ShopItem item in Data.MasterworkGuildData.shopItems)
+        {
+            @if (item.CanBuyAnother(Game.Player.GetNumberBought(item.GetItemKey())))
+            {
+                <MadnathRepairGame.Shared.Componets.ShopItem Item="@item"></MadnathRepairGame.Shared.Componets.ShopItem>
+            }
+
+        }
+    </div>
+</div>
+}
+else
+{
+    <div class="row container-fluid">
+        <div class="alert alert-info ml-5">
+            <h3 class="alert-heading">Guild Guard</h3>
+            <p class="">You need to reach level 100 atleast once to enter here.</p>
+        </div>
+    </div>
+}
+
+
+
+
+
+@code {
+    protected override void OnInitialized()
+        {
+            Game.onChange += StateHasChanged;
+            base.OnInitialized();
+        }
+        }

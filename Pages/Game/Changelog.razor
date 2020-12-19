@@ -1,0 +1,18 @@
+﻿@page "/game/changelog"
+@layout GameContainer
+
+@inject Services.Game Game;
+
+<div class="row container">
+    <h3>Changelog</h3>
+</div>
+<div class="container ml-4">
+    @foreach(Models.ChangelogArticle article in Data.ChangelogData.Changelog)
+    {
+        <MadnathRepairGame.Shared.Componets.ChangelogArticle Article="article" />
+    }
+</div>
+
+@code {
+
+}

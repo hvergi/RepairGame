@@ -1,0 +1,57 @@
+﻿@inject Services.Game Game;
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage;
+
+<div class="float-md-right">
+    <button type="button" class="btn btn-primary" @onclick="InGameSave">Save Game</button>
+    <button type="button" class="btn btn-primary" onclick="ExportSave('@SaveArgs()')">Export Game</button>
+</div>
+<div class="container-fluid">
+    <div>
+        <p>
+            <h4>Repair Level: <span>@Game.Player.RepairLevel.ToString("0.0000000000000")</span></h4>
+            @if (Game.Player.Affinties > 0)
+            {
+                <span> Affinties: @Game.Player.Affinties</span>
+            }
+        </p>
+    </div>
+    <div class="bg-light text-dark mt-3">
+        <ul class="list-group list-group-horizontal">
+            <li class="list-group-item">@Data.ShopData.Currencies[(int)Data.ShopData.Currency.Coins]: <span>@Game.Player.Wallet[(int)Data.ShopData.Currency.Coins]</span></li>
+            <li class="list-group-item">@Data.ShopData.Currencies[(int)Data.ShopData.Currency.RareCoins]: <span>@Game.Player.Wallet[(int)Data.ShopData.Currency.RareCoins]</span></li>
+            <li class="list-group-item">@Data.ShopData.Currencies[(int)Data.ShopData.Currency.MasterMarks]: <span>@Game.Player.Wallet[(int)Data.ShopData.Currency.MasterMarks]</span></li>
+        </ul>
+    </div> 
+</div>
+
+
+@code {
+    //
+    protected override void OnInitialized()
+    {
+        Game.onChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    private void InGameSave()
+    {
+        localStorage.SetItem<string>(Game.Settings.GetSaveKey(Game.SaveSlot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
+    }
+
+    private void InGameLoad()
+    {
+        Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(0)));
+        Game.LoadSave(sm);
+        Game.isGameLoaded = true;
+        for (int i = 0; i < Game.isRepairActive.Length; i++)
+        {
+            Game.isRepairActive[i] = false;
+        }
+        Game.SaveSlot = 0;
+    }
+
+    private string SaveArgs()
+    {
+        return Game.Settings.GetSaveKey(Game.SaveSlot);
+    }
+}

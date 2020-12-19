@@ -1,0 +1,212 @@
+﻿@page "/"
+
+@inject Services.Game Game;
+@inject NavigationManager NavigationManager;
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage;
+@inject DialogService DialogService
+
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        @for (int i = 0; i < Game.Settings.SaveFiles; i++)
+        {
+            var a = i;
+            <div class="col">
+                <div class="card text-dark">
+                    <h5 class="card-header text-center">Save Slot @(i+1)</h5>
+                    <div class="card-body">
+                        @if (IsSavePresent(i))
+                        {
+                            <p class="card-text">
+                                Username: @GetSaveSlotName(i) <br />
+                                Repair Level: @GetSaveSlotLevel(i) <br />
+                                Coins: @GetSaveSlotCoins(i) <br />
+                                Timestamp: @GetSaveSlotTime(i) <br />
+                            </p>
+                        }
+                        else
+                        {
+                            <p>Empty</p>
+                        }
+                    </div>
+                    <div class="card-footer">
+                        @if (IsSavePresent(i))
+                        {
+                            <button type="button" class="btn btn-success btn-block" @onclick="@(() => LoadGame(a))">Load</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="ExportSave('@SaveArgs(a)')">Export</button>
+                            <button type="button" class="btn btn-danger btn-block" @onclick="@(() => DeleteGame(a))">Delete</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary btn-block" @onclick="@(() => NewGame(a))">New Game</button>
+                            <button type="button" class="btn btn-secondary btn-block" @onclick="@(() => ImportGame(a))">Import</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="jumbotron">
+            <div class="container-fluid">
+                <h1 class="display-4">Welcome</h1>
+                <p class="lead">An Idle game for madnath inspired by his passion. Created by Hvergi.</p>
+                <hr class="my-4" />
+                <p>
+                    To start playing click the New or Load game button above.
+                </p>
+                <p class="lead">
+                    <div class="alert alert-danger container-fluid">
+                        <h5>This Game IS IN BETA.</h5>
+                        <span>Your saves will NOT carry over and there will be bugs. You have been warned.</span>
+                    </div>
+                </p>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+@code{
+
+
+    private bool IsSavePresent(int slot)
+    {
+        if ((localStorage.ContainKey(Game.Settings.GetSaveKey(slot))))
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(slot)));
+            return sm.Account.IsSaveValid;
+        }
+        return false;
+    }
+
+    private string GetSaveSlotName(int slot)
+    {
+        if (IsSavePresent(slot))
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(slot)));
+            return sm.Player.Name;
+        }
+        return "Error";
+    }
+    private string GetSaveSlotCoins(int slot)
+    {
+        if (IsSavePresent(slot))
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(slot)));
+            return sm.Player.Wallet[(int)Data.ShopData.Currency.Coins].ToString();
+        }
+        return "Error";
+    }
+    private string GetSaveSlotLevel(int slot)
+    {
+        if (IsSavePresent(slot))
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(slot)));
+            return sm.Player.RepairLevel.ToString();
+        }
+        return "Error";
+    }
+    private string GetSaveSlotTime(int slot)
+    {
+        if (IsSavePresent(slot))
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(slot)));
+            return sm.Account.LastSaveDate.ToLongDateString();
+        }
+        return "Error";
+    }
+
+    private async void NewGame(int slot)
+    {
+        DialogOptions dialogOptions = new DialogOptions();
+        dialogOptions.ShowClose = false;
+        var objAsync = await DialogService.OpenAsync<Shared.Modals.PlayerName>("Character Creation",null,dialogOptions);
+        if (objAsync is not string || objAsync == null)
+        {
+            Game.Player.Name = "Insubordinate";
+        }
+        else
+        {
+            if (String.IsNullOrWhiteSpace(objAsync))
+            {
+                Game.Player.Name = "Insubordinate";
+            }
+            else if((string)objAsync.ToLower() == "Enter a Name....".ToLower() || objAsync.ToLower() == "a Name".ToLower() || objAsync.ToLower() == "Name".ToLower())
+            {
+                Game.Player.Name = "Cheeky";
+            }
+            else
+            {
+                Game.Player.Name = objAsync;
+            }
+
+        }
+        Game.isGameLoaded = true;
+        Game.SaveSlot = slot;
+        Game.BuyItem(Data.MarketData.shopItems[0]);
+        localStorage.SetItem<string>(Game.Settings.GetSaveKey(slot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
+        NavigationManager.NavigateTo("/game");
+    }
+
+    private void LoadGame(int slot)
+    {
+        if (IsSavePresent(slot))
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString(localStorage.GetItem<string>(Game.Settings.GetSaveKey(slot)));
+            Game.LoadSave(sm);
+            Game.isGameLoaded = true;
+            Game.SaveSlot = slot;
+            NavigationManager.NavigateTo("/game");
+        }
+    }
+
+    private void DeleteGame(int slot)
+    {
+        localStorage.RemoveItem(Game.Settings.GetSaveKey(slot));
+    }
+
+    private async void ImportGame(int slot)
+    {
+        var objAsync = await DialogService.OpenAsync<Shared.Modals.ImportGame>("Import Game");
+        if(objAsync is not string || objAsync == null)
+        {
+            return;
+        }
+        else
+        {
+            Models.SaveModel sm = Systems.SaveSystem.ReadSaveString((string)objAsync);
+            if (sm.Account.IsSaveValid)
+            {
+                localStorage.SetItem<string>(Game.Settings.GetSaveKey(slot), (string)objAsync);
+                StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine("Failed");
+            }
+        }
+
+
+
+        //await ShowInlineDialog();
+        Console.WriteLine(objAsync);
+    }
+
+    private string SaveArgs(int slot)
+    {
+        return Game.Settings.GetSaveKey(slot);
+    }
+
+    async Task ShowInlineDialog() => await DialogService.OpenAsync("Simple Dialog", ds =>
+    @<div>
+        <p Style="margin-bottom: 1rem">Confirm?</p>
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenButton Text="Ok" Click="() => ds.Close(true)" Style="margin-bottom: 10px; width: 150px" />
+                <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 10px; width: 150px" />
+            </div>
+        </div>
+    </div>);
+
+}

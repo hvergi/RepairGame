@@ -1,0 +1,30 @@
+﻿<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5 class="display-4">@Article.Title</h5>
+        <div class="font-weight-light text-muted">@Article.Date</div>
+        <p class="lead">@Article.Description</p>
+        <div class="my-4">
+            @foreach(Models.ChangeLogItem logItem in Article.ChangeLogs)
+            {
+                <span class="@Models.ChangeLogItem.ChangeCss[(int)logItem.ChangeType]">
+                    @Models.ChangeLogItem.ChangeText[(int)logItem.ChangeType]
+                </span>
+                <span>@logItem.Title</span><br />
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public Models.ChangelogArticle Article { get; set; }
+}

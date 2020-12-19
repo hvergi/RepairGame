@@ -1,0 +1,14 @@
+﻿@inject Radzen.DialogService dialogService
+<div class="container-fluid">
+    <RadzenTextBox @bind-Value=@Value Style="width:500px; height:60px;" Placeholder="Enter a Name...." />
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <RadzenButton Click="@((args) => dialogService.Close(Value))" Text="Start Game" Style="margin-bottom: 10px; width: 350px" />
+    </div>
+</div>
+
+@code{
+    public string Value { get; set; }
+}

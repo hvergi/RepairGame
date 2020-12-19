@@ -1,0 +1,54 @@
+﻿@page "/game"
+@layout GameContainer
+
+@inject Services.Game Game;
+
+<h2>Welcome @Game.Player.Name</h2>
+<div class="row container-fluid">
+    <div class="alert alert-danger container-fluid">
+        <h5>This Game IS IN BETA.</h5>
+        <p>Your saves may not carry over between versions and there might be bugs. You have been warned.</p>
+    </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">About this game</h5>
+                <p class="card-text">
+                    This game was made at the request of Madnath. It features an idle-esque gameplay where you repair items for customers.
+                    Customers don't like losing their precious quailty, and will pay you based on the amount they lost.
+                    Higher skill and upgrades will help reduce the quailty loss.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Disclaimer</h5>
+                <p class="card-text">
+                    This game is inspired by <a href="https://www.wurmonline.com/" target="_blank">Wurm Online</a>, it is my personal take on what a game about repairing items would look like.
+                    This game is not affiliated with or sponsored by <a href="https://www.wurmonline.com/" target="_blank">Wurm Online</a> or it's owners/staff.
+
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Found a bug???</h5>
+                <p class="card-text">
+                    Report bugs on Github
+                </p>
+                <p>
+                    This game is opensourced, you can find the code here.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {      
+   
+}

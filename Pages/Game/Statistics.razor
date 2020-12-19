@@ -1,0 +1,44 @@
+﻿@page "/game/statistics"
+@layout GameContainer
+
+@inject Services.Game Game;
+<div class="row container">
+    <h3>Statistics</h3>
+</div>
+<div class="row container ml-4">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Stat</th>
+                <th scope="col">Number Repaired this run</th>
+                <th scope="col">Number Repaired all time</th>
+                <th scope="col">% of total Items this run</th>
+                <th scope="col">% of total Items all time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(string key in Data.StatData.RepairItemRarity)
+            {
+                <MadnathRepairGame.Shared.Componets.StatRow Key="@key"></MadnathRepairGame.Shared.Componets.StatRow>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row container-fluid">
+    <div class="row container-fluid">
+        <ul>
+            @foreach (string item in Game.Player.Stats.Statistics.Keys)
+            {
+                <li>@item: @(Game.Player.Stats.GetStatCount(item))</li>
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Game.onChange += StateHasChanged;
+        base.OnInitialized();
+    }
+}
