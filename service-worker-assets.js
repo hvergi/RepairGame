@@ -281,7 +281,7 @@
       "url": "_framework\/System.Linq.Dynamic.Core.dll"
     },
     {
-      "hash": "sha256-Q4PivozZLiIObMwFFjItgm34T6NLT1v2dCnu2wyRTFo=",
+      "hash": "sha256-diAmZ\/5SfbHBpP1wnTCf3pbxBNryw2+vxGviPIEbGrk=",
       "url": "_framework\/MadnathRepairGame.dll"
     },
     {
@@ -441,7 +441,7 @@
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
-      "hash": "sha256-21yPKwxxtWlrQ4kkXm0yM\/lW67SOtJoY9f7ykUPnF1Q=",
+      "hash": "sha256-W1TP4QCDroeJREvarNgg0n2XHGm801MJDahNC6CSFkc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -449,5 +449,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "8zmdOUZg"
+  "version": "ewfTrCuB"
 };
