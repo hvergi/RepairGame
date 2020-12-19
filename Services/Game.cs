@@ -7,7 +7,7 @@ namespace MadnathRepairGame.Services
 {
     public class Game
     {
-        public bool IsDev = false;
+        public bool IsDev = true;
         
         //GUI quirks
         public event Action onChange;

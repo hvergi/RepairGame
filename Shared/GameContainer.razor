@@ -35,8 +35,12 @@
         {
             NavigationManager.NavigateTo(Game.GetPageUrl("/"));
         }
-        RepairLoop();
-        Game.onMessage += ShowNotification;
+        else
+        {
+            RepairLoop();
+            Game.onMessage += ShowNotification;
+        }
+
         return base.OnInitializedAsync();
     }
 
@@ -47,13 +51,16 @@
         while (isRepairRunning)
         {
             await Task.Delay(Game.Settings.TickSpeed);
-            saveDelay++;
-            Game.RepairItems();
-            StateHasChanged();
-            if (saveDelay == 10)
+            if (Game.isGameLoaded)
             {
-                saveDelay = 0;
-                localStorage.SetItem<string>(Game.Settings.GetSaveKey(Game.SaveSlot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
+                saveDelay++;
+                Game.RepairItems();
+                StateHasChanged();
+                if (saveDelay == 10)
+                {
+                    saveDelay = 0;
+                    localStorage.SetItem<string>(Game.Settings.GetSaveKey(Game.SaveSlot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
+                }
             }
         }
     }
