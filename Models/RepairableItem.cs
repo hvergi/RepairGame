@@ -11,13 +11,16 @@ namespace MadnathRepairGame.Models
     public class RepairableItem
     {
 
-        const double BASEQLLOSS = 1;
+        const double BASEQLLOSS = 5;
         const double BASEDMG = 10;
         const double MAXLEVEL = 100;
         const double MINQLLOSS = .0001;
-        const double BASEEXPGAIN = .001;
+        const double BASEEXPGAIN = .0005;
         const double MINEXP = 0.00000000000001;
         const double MAXEXPMULTI = 1.2;
+
+        const double NEWPLAYEREXPBONUS = 1.5;
+        const double NEWPLAYERLIMIT = 15;
 
 
         public int ItemID { get; set; }
@@ -70,7 +73,7 @@ namespace MadnathRepairGame.Models
         }
 
 
-        public double RepairItem(double RepairLevel)
+        public double RepairItem(double RepairLevel, double bonusexp = 1)
         {
             double dmgRepaired = DmgLossTick();
             if (dmgRepaired > DmgCurrent)
@@ -81,7 +84,11 @@ namespace MadnathRepairGame.Models
 
             DmgCurrent -= dmgRepaired;
             QLCurrent -= qlLoss;
-            return GetExpTick(RepairLevel);
+            if(QLCurrent < 1)
+            {
+                QLCurrent = 1;
+            }
+            return GetExpTick(RepairLevel, bonusexp);
 
         }
 
@@ -102,7 +109,7 @@ namespace MadnathRepairGame.Models
             return qlLoss;
         }
 
-        public double GetExpTick(double RepairLevel)
+        public double GetExpTick(double RepairLevel, double bonusexp)
         {
             if (RepairLevel >= MAXLEVEL)
             {
@@ -119,8 +126,14 @@ namespace MadnathRepairGame.Models
             {
                 val = (adjusted * BASEEXPGAIN) * lvlMulti;
             }
+            val *= bonusexp;
             if (val < MINEXP)
                 val = MINEXP;
+
+            if(RepairLevel < NEWPLAYERLIMIT)
+            {
+                val *= NEWPLAYEREXPBONUS;
+            }
             return val;
         }
 

@@ -1,4 +1,5 @@
-﻿
+﻿@inject Services.Game Game;
+
 <div class="col-sm-12 col-md-4 col-lg-2 bg-dark text-warning">
     <div class="bg-light text-dark border border-warning">
         <NavLink href="game"><button type="button" class="btn btn-outline-dark btn-block">Home</button></NavLink>
@@ -20,6 +21,13 @@
         <NavLink href="game/changelog"><button type="button" class="btn btn-outline-dark btn-block">Changelog</button></NavLink>
         <NavLink href="game/settings"><button type="button" class="btn btn-outline-dark btn-block">Settings</button></NavLink>
     </div>
+    @if (Game.IsDev)
+    {
+        <h3 class="text-warning border-bottom">Dev Tools</h3>
+        <div class="bg-light text-dark border border-warning">
+            <NavLink href="game/sim"><button type="button" class="btn btn-outline-dark btn-block">Simulation</button></NavLink>
+        </div>
+    }
 </div>
 
 

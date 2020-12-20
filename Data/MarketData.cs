@@ -23,12 +23,12 @@ namespace MadnathRepairGame.Data
         {
             new ShopItem("Workstation 1 Unlock",1,0,"Unlocks a workstation for repairing items."),
             new ShopItem("Workstation 2 Unlock",1,1000,"Unlocks a workstation for repairing items."),
-            new ShopItem("Workstation 3 Unlock",1,2500,"Unlocks a workstation for repairing items."),
-            new ShopItem("Workstation 4 Unlock",1,4000,"Unlocks a workstation for repairing items."),
-            new ShopItem("Workstation 5 Unlock",1,6000,"Unlocks a workstation for repairing items."),
-            new ShopItem("Workstation 6 Unlock",1,7500,"Unlocks a workstation for repairing items."),
-            new ShopItem("Workstation 7 Unlock",1,20000,"Unlocks a workstation for repairing items."),
-            new ShopItem("Workstation 8 Unlock",1,50000,"Unlocks a workstation for repairing items."),
+            new ShopItem("Workstation 3 Unlock",1,4500,"Unlocks a workstation for repairing items."),
+            new ShopItem("Workstation 4 Unlock",1,9000,"Unlocks a workstation for repairing items."),
+            new ShopItem("Workstation 5 Unlock",1,15000,"Unlocks a workstation for repairing items."),
+            new ShopItem("Workstation 6 Unlock",1,30000,"Unlocks a workstation for repairing items."),
+            new ShopItem("Workstation 7 Unlock",1,90000,"Unlocks a workstation for repairing items."),
+            new ShopItem("Workstation 8 Unlock",1,150000,"Unlocks a workstation for repairing items."),
         };
     }
 }

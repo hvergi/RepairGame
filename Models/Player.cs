@@ -49,12 +49,17 @@ namespace MadnathRepairGame.Models
 
         public void AwardEXP(double amount)
         {
+            RepairLevel +=amount;
+        }
+
+        public double GetAffintyBonus()
+        {
             double bonusEXP = 1;
             if (Affinties > 0)
             {
                 bonusEXP += (Affinties * 10) / 100;
             }
-            RepairLevel +=amount * bonusEXP;
+            return bonusEXP;
         }
 
         public bool CanBuy(Data.ShopData.Currency currency, double amount)
@@ -91,7 +96,7 @@ namespace MadnathRepairGame.Models
 
         public Radzen.NotificationMessage RareCurrencyRoll()
         {
-            int roll = rng.Next(0, 3600);
+            int roll = rng.Next(0, 10000);
             if(roll == 0)
             {
                 AddCurrency(Data.ShopData.Currency.RareCoins, 1);
@@ -108,7 +113,7 @@ namespace MadnathRepairGame.Models
         }
         public Radzen.NotificationMessage AffintyRoll()
         {
-            int roll = rng.Next(0, 360000);
+            int roll = rng.Next(0, 3600000);
             if (roll == 0)
             {
                 Affinties++;

@@ -7,11 +7,11 @@ namespace MadnathRepairGame.Services
 {
     public class Game
     {
-        public bool IsDev = false;
+        public bool IsDev = true;
         
         //GUI quirks
         public event Action onChange;
-        private void NotifyDataChanged() => onChange?.Invoke();
+        public void NotifyDataChanged() => onChange?.Invoke();
 
         public event Action<Radzen.NotificationMessage> onMessage;
         public void SendMessage(Radzen.NotificationMessage message) => onMessage?.Invoke(message);
@@ -45,9 +45,15 @@ namespace MadnathRepairGame.Services
             {
                 if (!Player.WorkstationUnlocked[i] || !isRepairActive[i])
                     continue;
-                Player.AwardEXP(Player.Items[i].RepairItem(Player.RepairLevel));
-                SendMessage(Player.RareCurrencyRoll());
-                SendMessage(Player.AffintyRoll());
+                double expAmount = Player.Items[i].RepairItem(Player.RepairLevel,Player.GetAffintyBonus());
+                int rollmax = (int)(125 - Player.RepairLevel);
+                int exproll = rng.Next(0, 100);
+                if (exproll < rollmax)
+                {
+                    Player.AwardEXP(expAmount);
+                    SendMessage(Player.RareCurrencyRoll());
+                    SendMessage(Player.AffintyRoll());
+                }
                 if (Player.Items[i].DmgCurrent <= 0)
                 {
                     isRepairActive[i] = false;

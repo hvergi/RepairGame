@@ -1,0 +1,93 @@
+﻿
+@page "/game/sim"
+@layout GameContainer
+
+@inject Services.Game Game;
+
+@using Data;
+@using Models; 
+@using Factories;
+
+<h3>Simulation</h3>
+<div class="row container ml-4">
+    <div class="container-fluid">
+        <h5>Simulate from level to level.</h5>
+        From:<input type="text" @bind-value="from" /><br />
+        To:<input type="text" @bind-value="to" /><br />
+        <button class="btn btn-primary" @onclick="RunSim">Run Simulation Level</button><br />
+        <button class="btn btn-primary" @onclick="RunAvgCoins">Run Simulation Avg Coins</button><br />
+        <span>@output</span>
+    </div>
+</div>
+
+@code {
+    public double from { get; set; } = 0;
+    public double to { get; set; } = 0;
+    public string output { get; set; } = "";
+
+    private async void RunSim()
+    {
+        output = "Stating Simulation from " + from + " to " + to;
+        Game.Player.RepairLevel = from;
+        Game.Player.Wallet[0] = 0;
+        Game.Player.Wallet[1] = 0;
+        Game.Player.Affinties = 0;
+        double ticks = await RepairTask(to);
+        output = "It took " + ticks + " ticks to complete Mins: " + (ticks/10/60);
+        Game.NotifyDataChanged();
+        StateHasChanged();
+
+    }
+
+    private async void RunAvgCoins()
+    {
+        output = "Stating Simulation from " + from + " to " + to + " to find avg coins";
+        double coins = 0;
+        for(int i=0; i<10; i++)
+        {
+            Game.Player.RepairLevel = from;
+            Game.Player.Wallet[0] = 0;
+            Game.Player.Wallet[1] = 0;
+            Game.Player.Affinties = 0;
+            await RepairTask(to);
+            coins += Game.Player.Wallet[0];
+            await Task.Delay(100);
+        }
+        output = "Total Coins: " + coins + " Avg Coins: " + (coins / 10);
+        Game.NotifyDataChanged();
+        StateHasChanged();
+    }
+
+
+
+    private async Task<double> RepairTask(double to)
+    {
+        Random rng = new Random();
+        double repairTicks = 0;
+        while(Game.Player.RepairLevel < to)
+        {
+            await Task.Delay(100);
+            for(int i =0; i<100; i++)
+            {
+                RepairableItem ri = RepairableItemFactory.GetNewRepairableItem(Game.Player.RepairLevel);
+                while (ri.DmgCurrent > 0)
+                {
+                    double expAmount = ri.RepairItem(Game.Player.RepairLevel);
+                    int rollmax = (int)(125 - Game.Player.RepairLevel);
+                    int exproll = rng.Next(0, 100);
+                    if (exproll < rollmax)
+                    {
+                        Game.Player.AwardEXP(expAmount);
+                        Game.Player.RareCurrencyRoll();
+                        Game.Player.AffintyRoll();
+                    }
+                    repairTicks++;
+                }
+                Game.Player.AddCurrency(Data.ShopData.Currency.Coins, ri.GetPrice());
+                if (Game.Player.RepairLevel > to)
+                    break;
+            }
+        }
+        return repairTicks;
+    }
+}
