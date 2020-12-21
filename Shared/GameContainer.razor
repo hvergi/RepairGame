@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager NavigationManager;
 @inject Services.Game Game;
 @inject Blazored.LocalStorage.ISyncLocalStorageService localStorage;
+@inject Radzen.DialogService dialogService
 @inject NotificationService NotificationService;
 
 @layout MainLayout
@@ -39,6 +40,11 @@
         {
             RepairLoop();
             Game.onMessage += ShowNotification;
+            if (Game.Account.LastGameVersion != Models.Settings.GameVersion)
+            {
+                DialogOptions dialogOptions = new DialogOptions();
+                dialogService.OpenAsync<Shared.Modals.ChangelogModal>("", null, dialogOptions);
+            }
         }
         if (Game.IsDev)
         {
