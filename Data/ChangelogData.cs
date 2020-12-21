@@ -9,10 +9,11 @@ namespace MadnathRepairGame.Data
     {
         public static Models.ChangelogArticle[] Changelog =
         {
-             new Models.ChangelogArticle("Beta 0.1.1","Dec 18th 2020",
+             new Models.ChangelogArticle("Beta 0.1.1","Dec 20th 2020",
                 "Balance Changes",
                 new Models.ChangeLogItem[] {
                 new Models.ChangeLogItem("Added popup for when a player loads an old save.",Models.ChangeLogItem.ChangeTypes.New),
+                new Models.ChangeLogItem("Achivements reenabled, Just 1 for now.",Models.ChangeLogItem.ChangeTypes.New),
 
                 new Models.ChangeLogItem("More ql is lost during repairs, making level more important.",Models.ChangeLogItem.ChangeTypes.Change),
                 new Models.ChangeLogItem("Prices of workstations adjusted to match new coin rates.",Models.ChangeLogItem.ChangeTypes.Change),

@@ -1,0 +1,58 @@
+﻿@inject Services.Game Game;
+
+<div class="col-6">
+    <div class="card container-fluid">
+        @if (!Game.Player.IsAchivementUnlocked(Achivement))
+        {
+            <h5 class="card-header text-center">?????</h5>
+            <div class="card-body">
+                <p class="card-text">
+                    ????????????????????????????
+                </p>
+            </div>
+        }
+        else
+        {
+            <h5 class="card-header text-center">@Achivement.Title</h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Progress: @Game.Player.GetAchivementProgress(Achivement.StatKey) of @Achivement.AchivementTiers[GetCurrentTier()]
+                    @if(Achivement.AchivementCount > 1)
+                    {
+                        <br />
+                        <span>Tier: @(GetCurrentTier()+1) of @Achivement.AchivementCount</span>
+                    }
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+        [Parameter]
+        public Models.AchivementItem Achivement { get; set; }
+
+    protected override void OnInitialized()
+    {
+        //Game.onChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    private int GetCurrentTier()
+    {
+        if (Achivement.AchivementCount == 1)
+            return 0;
+        double progress = Game.Player.GetAchivementProgress(Achivement.StatKey);
+        int tier = 0;
+        for(int i=0; i<Achivement.AchivementCount; i++)
+        {
+            if (progress >= Achivement.AchivementTiers[i])
+            {
+                tier++;
+            }
+        }
+        if (tier >= Achivement.AchivementTiers.Length)
+            tier = Achivement.AchivementTiers.Length - 1;
+        return tier;
+    }
+}

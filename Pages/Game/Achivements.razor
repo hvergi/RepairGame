@@ -7,7 +7,10 @@
     <h3>Achivements</h3>
 </div>
 <div class="row container ml-4">
-    <p>Achivements have been disabled for now.</p>
+    @foreach(Models.AchivementItem achivement in Data.AchivementData.Achivements)
+    {
+        <MadnathRepairGame.Shared.Componets.AchivementCell Achivement="achivement" />
+    }
 </div>
 
 @code {

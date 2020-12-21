@@ -30,6 +30,8 @@ namespace MadnathRepairGame.Models
 
         public Dictionary<string, int> BoughtItems { get; set; } = new Dictionary<string, int>();
 
+        //public Dictionary<string, double> AchivementProgress { get; set; } = new Dictionary<string, double>();
+
         private Random rng = new Random();
 
         public void AddCurrency(Data.ShopData.Currency currency, double amount)
@@ -93,6 +95,24 @@ namespace MadnathRepairGame.Models
                 }
             return false;
         }
+
+        public double GetAchivementProgress(string key)
+        {
+            return Stats.GetAllStatCount(key);
+        }
+
+        public bool IsAchivementUnlocked(AchivementItem item)
+        {
+            if (item.IsAchivementHidden)
+            {
+                double progress = GetAchivementProgress(item.StatKey);
+                if (progress >= item.AchivementTiers[0])
+                    return true;
+                return false;
+            }
+            return true;
+        }
+
 
         public Radzen.NotificationMessage RareCurrencyRoll()
         {

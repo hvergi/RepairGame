@@ -34,7 +34,10 @@
     {
         if (!Game.isGameLoaded)
         {
-            //NavigationManager.NavigateTo(Game.GetPageUrl("/"));
+            if (!Game.IsDev)
+            {
+                NavigationManager.NavigateTo(Game.GetPageUrl("/"));
+            }
         }
         else
         {
@@ -70,7 +73,8 @@
                 if (saveDelay == 10)
                 {
                     saveDelay = 0;
-                    //localStorage.SetItem<string>(Game.Settings.GetSaveKey(Game.SaveSlot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
+                    if(!Game.IsDev)
+                        localStorage.SetItem<string>(Game.Settings.GetSaveKey(Game.SaveSlot), Systems.SaveSystem.CreateSaveString(new Models.SaveModel(Game.Account, Game.Player)));
                 }
             }
         }

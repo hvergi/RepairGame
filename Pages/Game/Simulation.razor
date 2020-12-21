@@ -1,11 +1,11 @@
 ﻿
 @page "/game/sim"
 @layout GameContainer
-
+@inject NavigationManager NavigationManager;
 @inject Services.Game Game;
 
 @using Data;
-@using Models; 
+@using Models;
 @using Factories;
 
 <h3>Simulation</h3>
@@ -21,6 +21,16 @@
 </div>
 
 @code {
+    protected override Task OnInitializedAsync()
+    {
+        if (!Game.IsDev)
+        {
+            NavigationManager.NavigateTo(Game.GetPageUrl("/game"));
+        }
+
+        return base.OnInitializedAsync();
+    }
+
     public double from { get; set; } = 0;
     public double to { get; set; } = 0;
     public string output { get; set; } = "";
@@ -33,7 +43,7 @@
         Game.Player.Wallet[1] = 0;
         Game.Player.Affinties = 0;
         double ticks = await RepairTask(to);
-        output = "It took " + ticks + " ticks to complete Mins: " + (ticks/10/60);
+        output = "It took " + ticks + " ticks to complete Mins: " + (ticks / 10 / 60);
         Game.NotifyDataChanged();
         StateHasChanged();
 
@@ -43,7 +53,7 @@
     {
         output = "Stating Simulation from " + from + " to " + to + " to find avg coins";
         double coins = 0;
-        for(int i=0; i<10; i++)
+        for (int i = 0; i < 10; i++)
         {
             Game.Player.RepairLevel = from;
             Game.Player.Wallet[0] = 0;
@@ -64,10 +74,10 @@
     {
         Random rng = new Random();
         double repairTicks = 0;
-        while(Game.Player.RepairLevel < to)
+        while (Game.Player.RepairLevel < to)
         {
             await Task.Delay(100);
-            for(int i =0; i<100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 RepairableItem ri = RepairableItemFactory.GetNewRepairableItem(Game.Player.RepairLevel);
                 while (ri.DmgCurrent > 0)
