@@ -1,10 +1,10 @@
 {
   "mainAssemblyName": "MadnathRepairGame",
   "resources": {
-    "hash": "sha256-2xhbQj6+cJqHQZ/HTWOPmG/3jwt4iaG9ZWPaMB3XaGo=",
+    "hash": "sha256-lYM0QC/FZcDdIHCzn8fa5Crd9iu8q52HenifxSzdtVY=",
     "fingerprinting": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "Blazored.LocalStorage.wasm",
-      "MadnathRepairGame.bjpxfbqjtk.wasm": "MadnathRepairGame.wasm",
+      "MadnathRepairGame.zpo7ssdvl9.wasm": "MadnathRepairGame.wasm",
       "Microsoft.AspNetCore.Components.Forms.o9iakyungi.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
       "Microsoft.AspNetCore.Components.ek77rt3m0v.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.mea9dz6b18.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
@@ -140,7 +140,7 @@
     },
     "assembly": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "sha256-OaMAAd5n7ORfyur5e3QIyEVKJ76MKIvwbg7/icnnYcU=",
-      "MadnathRepairGame.bjpxfbqjtk.wasm": "sha256-eSXfFZXyHt+cp6TafJQzernGnVhLRpTPaC1AgtaDyic=",
+      "MadnathRepairGame.zpo7ssdvl9.wasm": "sha256-GWtseY0+aZ6EdMl/q0BQwXs4pb2Ng4d6QbkmR+sViqU=",
       "Microsoft.AspNetCore.Components.Forms.o9iakyungi.wasm": "sha256-/HaFHd6QQWcyHs5zTBqK/ImNoZNoWFYfSqtPRMdi9is=",
       "Microsoft.AspNetCore.Components.ek77rt3m0v.wasm": "sha256-8p6PcBoGbDuKpt5nGTL+4qJAJcfCEHXTlC/3x1gpyoQ=",
       "Microsoft.AspNetCore.Components.Web.mea9dz6b18.wasm": "sha256-7lXg3KCAVsAbwRpj1+CtBMLmMo2WQr+HOVCsDSMrDJE=",
