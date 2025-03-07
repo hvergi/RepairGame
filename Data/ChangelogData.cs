@@ -9,7 +9,12 @@ namespace MadnathRepairGame.Data
     {
         public static Models.ChangelogArticle[] Changelog =
         {
-             new Models.ChangelogArticle("Beta 0.1.1","Dec 20th 2020",
+             new Models.ChangelogArticle("Beta 0.2.0","March 7th 2025",
+                "First beta release of MRG",
+                new Models.ChangeLogItem[] {
+                new Models.ChangeLogItem("Updated Blazor Libary",Models.ChangeLogItem.ChangeTypes.Change),
+            }),
+            new Models.ChangelogArticle("Beta 0.1.1","Dec 20th 2020",
                 "Balance Changes",
                 new Models.ChangeLogItem[] {
                 new Models.ChangeLogItem("Added popup for when a player loads an old save.",Models.ChangeLogItem.ChangeTypes.New),
