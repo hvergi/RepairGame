@@ -10,9 +10,11 @@ namespace MadnathRepairGame.Data
         public static Models.ChangelogArticle[] Changelog =
         {
              new Models.ChangelogArticle("Beta 0.2.0","March 7th 2025",
-                "First beta release of MRG",
+                "It's been awhile, time for some updates.",
                 new Models.ChangeLogItem[] {
                 new Models.ChangeLogItem("Updated Blazor Libary",Models.ChangeLogItem.ChangeTypes.Change),
+                new Models.ChangeLogItem("Changed min payout for repair job to 1 coin",Models.ChangeLogItem.ChangeTypes.Change),
+                new Models.ChangeLogItem("Fixed typo on shield item.",Models.ChangeLogItem.ChangeTypes.Fix),
             }),
             new Models.ChangelogArticle("Beta 0.1.1","Dec 20th 2020",
                 "Balance Changes",

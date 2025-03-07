@@ -92,7 +92,7 @@ namespace MadnathRepairGame.Data
             new Item("Cloth Horse Armour",ItemCatagories.Armour,30,12,1.2f),
             new Item("Leather Armour",ItemCatagories.Armour,35,10,1.2f),
             new Item("Leather Horse Armour",ItemCatagories.Armour,35,10,1.2f),
-            new Item("Sheild",ItemCatagories.Armour,40,8,1.2f),
+            new Item("Shield",ItemCatagories.Armour,40,8,1.2f),
             new Item("Chain Armour",ItemCatagories.Armour,45,6,1.2f),
             new Item("Chain Horse Armour",ItemCatagories.Armour,45,6,1.2f),
             new Item("Plate Armour",ItemCatagories.Armour,50,3,1.5f),

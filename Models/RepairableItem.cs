@@ -39,7 +39,7 @@ namespace MadnathRepairGame.Models
             double price = 10 * (QLStarting/10);
             price = price * NpcData.Npcs[NpcID].PriceMulti * ItemData.Items[ItemID].Value * ItemData.RARITYBONUS[(int)ItemRarity, 0];
             double multi = QLCurrent / QLStarting;
-            return Math.Floor(price*multi);
+            return Math.Max(1,Math.Floor(price*multi));
         }
 
         public RepairableItem()
